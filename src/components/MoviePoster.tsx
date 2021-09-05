@@ -1,10 +1,14 @@
 // React
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 // interfaces
 import { Movie } from '../interfaces/movieInterface';
 
+// Thirds
+import { useNavigation } from '@react-navigation/core';
+import { RootStackParamList } from '../navigation/Navigation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 interface Props {
   movie: Movie;
   height?: number;
@@ -13,12 +17,24 @@ interface Props {
 
 export const MoviePoster = ({ movie, height = 420, width = 300 }: Props) => {
   const uri = `https://image.tmdb.org/t/p/w500/${movie.poster_path}`;
+
+  type HomeScreenNavigationProp = NativeStackNavigationProp<
+    RootStackParamList,
+    'Home'
+  >;
+
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => navigation.navigate('DetailScreen', movie)}
+      activeOpacity={0.8}
       style={{
         width,
         height,
-        marginHorizontal: 8,
+        marginHorizontal: 2,
+        paddingBottom: 20,
+        paddingHorizontal: 7,
       }}>
       <View style={styles.imageContainer}>
         <Image
@@ -28,7 +44,7 @@ export const MoviePoster = ({ movie, height = 420, width = 300 }: Props) => {
           style={styles.image}
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
